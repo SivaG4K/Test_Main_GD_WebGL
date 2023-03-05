@@ -177,5 +177,11 @@
 	  }
 	});
   </script>
+	<script>
+      // Send the hostname of the hosting website to the parent window
+      const parentWindow = window.parent;
+      const hostingHostname = window.location.hostname;
+      parentWindow.postMessage(hostingHostname, "*");
+    </script>
   
 </html>
