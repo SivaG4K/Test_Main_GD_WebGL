@@ -88,61 +88,6 @@
       }
 
     </style>
-	<script>
-	function GD_AD_Init() 
-	{
-	
-     window["GD_OPTIONS"] = {              
-          "gameId": "55603138fa704f8a9f5e524728ba1388",
-          "onEvent": function(event) {
-              switch (event.name) {
-                  case "SDK_GAME_START":
-						game_resume()
-                      // advertisement done, resume game logic and unmute audio             
-                      break;
-                  case "SDK_GAME_PAUSE":
-						game_pause()
-                      // pause game logic / mute audio                     
-                      break;
-                  case "COMPLETE":
-			            gd_complete();
-			            break;
-                  case "SKIPPED":
-			            gd_complete();
-			            break;
-                  case "SDK_GDPR_TRACKING":
-                      // this event is triggered when your user doesn't want to be tracked
-                      break;
-                  case "SDK_GDPR_TARGETING":
-                      // this event is triggered when your user doesn't want personalised targeting of ads and such
-                      break;
-                  case "AD_SDK_REQUEST_ADS":
-                      break;
-                  case "AD_SDK_FINISHED":
-
-                      break;
-                  case "AD_SDK_ERROR":
-                      break;
-                  case "AD_CANCELED":
-                      break;
-                  case "SDK_READY":
-                      window.adSDK = new adService();
-                      window.adSDK.startPreLoad();
-                      break;
-              }
-          },
-        };
-        (function(d, s, id) {
-            var js, fjs = d.getElementsByTagName(s)[0];
-            if (d.getElementById(id)) return;
-            js = d.createElement(s);
-            js.id = id;
-            js.src = 'https://html5.api.gamedistribution.com/main.min.js';
-            fjs.parentNode.insertBefore(js, fjs);
-        }(document, 'script', 'gamedistribution-jssdk'));
-	}
-    </script>
-	
   </head>
 
   <body>
@@ -160,49 +105,8 @@
   var gameInstance;
   console.log("document...."+window.document.referrer);
   console.log("location...."+window.location.href);
-  if(window.document.referrer.includes("games4king"))
-  {
-	console.log("games4king...website");
-	if(window.document.referrer.includes("stickman-home-escape"))
-	{
-		console.log("games4king...website...stickman");
-		gameInstance = UnityLoader.instantiate("gameContainer", "Build/Game6_Main.json", {onProgress: UnityProgress});
-	}
-	else
-	{
-		console.log("games4king...website...other");
-		gameInstance = UnityLoader.instantiate("gameContainer", "Build1/Game6_Main.json", {onProgress: UnityProgress});
-	}
-  }
-  else if(window.location.href.includes("games4king"))
-  {
-	console.log("games4king...website");
-	if(window.location.href.includes("stickman-home-escape"))
-	{
-		console.log("games4king...website...stickman");
-		gameInstance = UnityLoader.instantiate("gameContainer", "Build/Game6_Main.json", {onProgress: UnityProgress});
-	}
-	else
-	{
-		console.log("games4king...website...other");
-		gameInstance = UnityLoader.instantiate("gameContainer", "Build1/Game6_Main.json", {onProgress: UnityProgress});
-	}
-  }
-  else if(extractHostname(window.document.referrer).includes("gamedistribution"))
-  {
-   console.log("load..gamedistribution");
-   gameInstance = UnityLoader.instantiate("gameContainer", "Build/Game6_Main.json", {onProgress: UnityProgress});
-  }
-  else if(extractHostname(window.document.referrer)=="")
-  {
-   console.log("load..gamedistribution..null");
-   gameInstance = UnityLoader.instantiate("gameContainer", "Build/Game6_Main.json", {onProgress: UnityProgress});
-  }
-  else
-  {
-	console.log("load..other_website..."+extractHostname(window.document.referrer));
-	gameInstance = UnityLoader.instantiate("gameContainer", "Build1/Game6_Main.json", {onProgress: UnityProgress});
-  }
+  gameInstance = UnityLoader.instantiate("gameContainer", "Build/Game6_Main.json", {onProgress: UnityProgress});
+  
   function UnityProgress(gameInstance, progress) {
     if (!gameInstance.Module) {
       return;
@@ -224,80 +128,19 @@
   }
 	function gd_ad_call()
     {
-		if (gdsdk !== 'undefined' && gdsdk.showAd !== 'undefined') 
-		{
-			gdsdk.showAd();
-		}
-		else
-		{
-			setTimeout(gd_again_ad_call, 10000);
-		}
-		//GD_AD_Init()
-		//setTimeout(gd_ad_fun, 10000);
-		//setTimeout(preload_RV_ad, 10000);
-		//setTimeout(show_RV_ad, 30000);
-		//setTimeout(gd_ad_fun, 3000);
-		//setTimeout(gd_ad_fun, 60000);
+		
     }
 	function gd_again_ad_call()
     {			
-		console.log("gd_main_ad_call");
-		if (gdsdk !== 'undefined' && gdsdk.showAd !== 'undefined') 
-		{
-			gdsdk.showAd();
-		}
+		
 	}
 	function preload_RV_ad()
 	{
-		console.log("gd_RV_ad_load");
-		if (gdsdk !== 'undefined' && gdsdk.preloadAd !== 'undefined') 
-		{
-			gdsdk.preloadAd('rewarded').then(response => 
-			{
-				//gameInstance.SendMessage("Canvas", "reward_ad_loaded");
-				console.log("A rewarded ad can be shown to user when he/she clicked it");
-			}).catch(error => 
-			{
-				//gameInstance.SendMessage("Canvas", "reward_ad_not_available");
-				console.log("Any Rewarded ad is not available to user");
-			});
-		}
+		
 	}
 	function show_RV_ad(val)
 	{
-		console.log("gd_RV_ad_call");
-		if (gdsdk !== 'undefined' && gdsdk.showAd !== 'undefined') 
-		{
-			gdsdk.showAd('rewarded').then(response => 
-			{
-				setTimeout(preload_RV_ad, 1000);
-				//gameInstance.SendMessage("Canvas", "reward_completed",val);
-				console.log("reward_get_gd");
-			  // Ad process done. You can track "SDK_REWARDED_WATCH_COMPLETE" event if that event triggered, that means the user watched the advertisement completely, you can give reward there.
-			}).catch(error => 
-			{
-				setTimeout(preload_RV_ad, 1000);
-				console.log("reward_fail_gd");
-				//gameInstance.SendMessage("Canvas", "reward_fail",val);
-			  // An error catched. Please don't give reward here.
-			});
-		}
-	}
-	
-	function gd_complete()
-	{
-		console.log("ad_completed");
-		gameInstance.SendMessage("Canvas", "game_pause_status","off");
-	}
-	function game_pause()
-	{
-		console.log("game_pause");
-		gameInstance.SendMessage("Canvas", "game_pause_status","on");
-	}
-	function game_resume()
-	{
-		console.log("game_resume");
-		gameInstance.SendMessage("Canvas", "game_pause_status","off");
+		
 	}
     function extractHostname(url) 
     {
@@ -342,4 +185,3 @@
   </script>
   
 </html>
-
