@@ -162,26 +162,38 @@
     
         return hostname;
     }
-	function handleMsg(e) 
-	{
-		if(e!=undefined && e.data!=undefined && e.data.v1!=undefined)
-		{
-			console.log(e.data.v1);
-			if(e.data.v1=='gd_ad_init')
-			{
-				GD_AD_Init();
-			}
-			else if(e.data.v1=='gd_main_ad_calling')
-			{
-				gd_ad_call();
-			}
-			else if(e.data.v1=='gd_RV_ad_calling' && e.data.v2!=undefined)
-			{
-				show_RV_ad(e.data.v2);
-			}
-		}
-	}
-	addEventListener("message", handleMsg, true);
+	  // Listen for messages from the iframe
+window.addEventListener('message', function(event) {
+  // If the message is a request for the grandparent domain name
+  if (event.data && event.data.type === 'getGrandparentDomain') {
+    // Get the domain name of the grandparent window
+    var grandparentDomain = window.parent.location.hostname;
+
+    // Send a message to the iframe containing the grandparent domain name
+    event.source.postMessage({ type: 'grandparentDomain', domain: grandparentDomain }, event.origin);
+  }
+});
+	  
+// 	function handleMsg(e) 
+// 	{
+// 		if(e!=undefined && e.data!=undefined && e.data.v1!=undefined)
+// 		{
+// 			console.log(e.data.v1);
+// 			if(e.data.v1=='gd_ad_init')
+// 			{
+// 				GD_AD_Init();
+// 			}
+// 			else if(e.data.v1=='gd_main_ad_calling')
+// 			{
+// 				gd_ad_call();
+// 			}
+// 			else if(e.data.v1=='gd_RV_ad_calling' && e.data.v2!=undefined)
+// 			{
+// 				show_RV_ad(e.data.v2);
+// 			}
+// 		}
+// 	}
+// 	addEventListener("message", handleMsg, true);
   </script>
   
 </html>
